@@ -8,7 +8,7 @@
                     {{ \Carbon\Carbon::parse($post->created_at)->format('F d, Y')}} 
                 </p>
                 <div>
-                {{ $post->content }}
+                {!! $post->content !!}
                 </div>
             </div>
             

@@ -15,7 +15,7 @@
         
         <p class="blog-post-meta">{{ \Carbon\Carbon::parse($post->created_at)->format('F d, Y') }} by <a href="#">{{ $post->user['name'] }}</a></p>
 
-        <div> {{ $post->content }}</div>
+        <div> {!! Str::limit($post->content,200) !!}</div>
       </article>
       @endforeach
 

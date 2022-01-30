@@ -20,6 +20,31 @@
     <link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="{{ url('blog.css') }}" rel="stylesheet">
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+  <script>
+
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('eb4f82815eec7b3bf8f4', {
+      cluster: 'ap1'
+    });
+
+    var channel = pusher.subscribe('my-channel');
+    channel.bind('my-event', function(data) {
+      // alert(JSON.stringify(data));
+      var alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+      function alert(message, type) {
+        var wrapper = document.createElement('div')
+        wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+
+        alertPlaceholder.append(wrapper)
+      }
+      alert('New post available (' + data.message.title +
+      ') by ' + data.message.name, 'success');
+
+    });
+  </script>
   </head>
   <body>
     
@@ -50,8 +75,6 @@
         @guest
           <a class="btn btn-sm btn-outline-secondary" href="{{ route('signup') }}">Sign up</a>
         @endguest
-        
-        
 
       </div>
     </div>
@@ -70,17 +93,21 @@
 </div>
 
 <main class="container">
+<div id="liveAlertPlaceholder" style="position: absolute;
+    bottom: 20px;
+    z-index: 100;
+    right: 20px;"></div>
     @yield('content')
 </main>
 
 <footer class="blog-footer">
-  <p>Blog template built for <a href="https://getbootstrap.com/">Bootstrap</a> by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+  <p>Tutorial by Adis Nabawi</p>
   <p>
     <a href="#">Back to top</a>
   </p>
 </footer>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="{{ url('js/app.js') }}"></script>
   </body>
 </html>

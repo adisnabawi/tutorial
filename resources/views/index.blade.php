@@ -2,10 +2,40 @@
 @section('content')
   <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
     <div class="col-md-6 px-0">
-      <h1 class="display-4 fst-italic">{{ $main->title }}</h1>
-      <p class="lead my-3">{{ $main->content }}</p>
-      <p class="lead mb-0"><a href="{{ route('blog.id', ['id'=>$main->id]) }}" class="text-white fw-bold">Continue reading...</a></p>
+      <h1 class="display-4 fst-italic">{{ Str::upper($main->title) }}</h1>
+      <p class="lead my-3">{{ Str::limit($main->content, 50) }}</p>
+      @php
+      $timetoread = (Str::wordCount($main->content) * 100/1000);
+      @endphp
+      <small>{{  $timetoread > 60 ?  number_format($timetoread/60) . ' minutes ': $timetoread . ' seconds ' }} 
+         to read</small>
+      <p class="lead mb-0">
+        <a href="{{ route('blog.id', ['id'=>$main->id]) }}" class="text-white fw-bold">Continue reading...</a>
+      </p>
     </div>
+  </div>
+  <div>
+    <h5>Inspiring Quote</h5>
+    <div class="alert alert-primary" role="alert">
+      <span id="quote"></span>
+      <script>
+        var quote = '';
+        displayQuote();
+        setInterval(displayQuote, 10000);
+        function displayQuote(){
+          var r = new XMLHttpRequest();
+          r.open("GET", "{{ route('api.index') }}", true);
+          r.onreadystatechange = function () {
+            if (r.readyState != 4 || r.status != 200) return;
+            quote = JSON.parse(r.responseText);
+            document.getElementById('quote').textContent = quote.quote;
+          };
+          r.send();
+        }
+        
+      </script>
+    </div>
+    <br>
   </div>
 
   <div class="row mb-2">
